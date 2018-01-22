@@ -10,7 +10,7 @@ function getCars() {
             var newElement = document.createElement("li");
             let edit = `<a href='#' data-carid='${car.id}' data-carmake='${car.make}' data-carmodel='${car.model}' onclick='editCar(event)'>edit</a>`;
             let del = `<a href='#' data-carid='${car.id}' onclick='delCar(event)'>delete</a>`;
-            newElement.innerHTML = `${car.id} Make: ${car.make} Model: ${car.model} ${edit} | ${del}`;
+            newElement.innerHTML = `${car.id} Make: ${car.make} Model: ${car.model} Year: ${car.year} ${edit} | ${del}`;
             list.appendChild(newElement);
         });
     });
@@ -20,10 +20,12 @@ function addCar(e) {
     e.preventDefault();
     let make = $("#make");
     let model = $("#model");
+    let year = $("#year");
     let carid = $("#carid");
 
     let makeVal = make.val();
     let modelVal = model.val();
+    let yearVal =  year.val();
 
     if(makeVal == "" || modelVal == "") {
         alert('Make and Model cannot be blank');
@@ -31,7 +33,7 @@ function addCar(e) {
     }
 
     if (+carid.val() === 0) {
-        jQuery.post(`${_baseUrl}:${_port}/api/car`, { make: makeVal, model: modelVal }, function(data) {
+        jQuery.post(`${_baseUrl}:${_port}/api/car`, { make: makeVal, model: modelVal, year: yearVal }, function(data) {
             getCars();
         });
     } else {
@@ -49,6 +51,7 @@ function addCar(e) {
     $("#car-submit").val('Add Car');
     model.val("");
     make.val("");
+    year.val("");
 }
 
 function editCar(e) {
