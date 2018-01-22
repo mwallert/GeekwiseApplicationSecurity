@@ -56,7 +56,6 @@ class BlogController {
             const data = await BlogDb.insertOne(req.body);
             if (data) {
                 let blog = new Blog(data);
-                console.log(blog);
                 return Common.resultOk(res, blog);
             } else {
                 return Common.resultNotFound(res);

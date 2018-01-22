@@ -4,13 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <link rel="stylesheet" href="./styles.css">
   <title>Blogging it up</title>
 </head>
 <body>
-  <h1 class="red" id="title">
-    Hello World!
-  </h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <form id="blogForm">
+          <div class="col-6">
+            <label for="post">Post</label>
+            <input type="text"
+              class="form-control"
+              id="post">
+          </div>
+          <div class="col-6">
+            <label for="sig">Signature</label>
+            <input type="text"
+              class="form-control"
+              id="sig">
+          </div> <br/>
+          <div class="col-12">
+            <button class="btn btn-success"
+              type="submit">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <script src="./script.js"></script>
 </body>
 </html>
