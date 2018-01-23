@@ -12,24 +12,28 @@
 <body>
   <div class="container">
     <div class="row">
+      <div class="col-12 blog-posts" id="posts"></div>
       <div class="col-12">
-        <form id="blogForm">
+        <form id="blogForm" class="blog-form">
+          <div class="col-12">
+            <h5 class="sub-title">Add a new post</h5>
+          </div>
           <div class="col-6">
             <label for="post">Post</label>
             <input type="text"
-              class="form-control"
+              class="form-control input-spacing"
               id="post">
           </div>
           <div class="col-6">
             <label for="sig">Signature</label>
             <input type="text"
-              class="form-control"
+              class="form-control input-spacing"
               id="sig">
-          </div> <br/>
+          </div>
           <div class="col-12">
             <button class="btn btn-success"
               type="submit">
-              Submit
+                Submit
             </button>
           </div>
         </form>
