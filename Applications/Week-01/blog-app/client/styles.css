@@ -18,6 +18,10 @@
   margin-bottom: 15px;
 }
 
+.post:first-child {
+  margin-top: 15px;
+}
+
 .post .btn {
   margin-right: 10px;
   margin-bottom: 10px;

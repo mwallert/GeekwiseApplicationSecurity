@@ -27,7 +27,15 @@
       sig: sig.value
     };
 
-    createBlogPost(blog);
+    createBlogPost(blog)
+      .then(newBlog => {
+        buildBlogPosts([newBlog.data]);
+        newPost.value = "";
+        sig.value = "";
+      })
+      .catch(error => {
+        throw error;
+      });
   });
 
   function selectEl(el) {
@@ -47,13 +55,7 @@
       body: JSON.stringify(blog),
       headers: new Headers({"Content-Type": "application/json"})
     })
-    .then(res => res.json())
-    .then(newBlog => {
-      buildBlogPosts([newBlog.data]);
-      newPost.value = "";
-      newPost.sig = "";
-    })
-    .catch(error => console.log("Error: ", error));
+    .then(res => res.json());
   }
 
   function editBlogPost(blog) {
@@ -74,23 +76,22 @@
 
   function buildBlogPosts(posts) {
     posts.forEach(post => {
-      const postEl = document.createElement('div');
-      const actionContainer = document.createElement('div');
-      const editButton = document.createElement('button');
-      const deleteButton = document.createElement('button');
-      const postContent = document.createElement('p');
-      const postSig = document.createElement('p');
-      const timeStamp = document.createElement('p');
-      const editField = document.createElement('input');
+      const postEl = document.createElement('div'),
+        actionContainer = document.createElement('div'),
+        editButton = document.createElement('button'),
+        deleteButton = document.createElement('button'),
+        postContent = document.createElement('p'),
+        postSig = document.createElement('p'),
+        editField = document.createElement('input');
+
+      const time = new Date(post.updated_at);
+      let timeStamp = `${time.getMonth() + 1}/${time.getDate()}/${time.getFullYear()}`;
 
       postContent.innerText = post.post;
-      postSig.innerText = post.sig;
+      postSig.innerText = `${post.sig} - ${timeStamp}`;
       editField.value = post.post;
       editButton.innerText = 'Edit';
       deleteButton.innerText = 'Delete';
-
-      let time = new Date(post.created_at);
-      timeStamp.innerText = `${time.getMonth() + 1}/${time.getDate()}/${time.getFullYear()}`;
 
       postContent.classList = 'post-content';
       postEl.classList = 'col-12 post';
@@ -115,12 +116,15 @@
           editField.classList.add('hide');
 
           post.post = editField.value;
+          post.updated_at = new Date();
 
           editBlogPost(post)
             .then(updatedPost => {
+              const updatedTime = new Date(updatedPost.data.updated_at);
+              timeStamp = `${updatedTime.getMonth() + 1}/${updatedTime.getDate()}/${updatedTime.getFullYear()}`;
+
               postContent.innerText = updatedPost.data.post;
-              let updatedTime = new Date(updatedPost.data.updated_at);
-              timeStamp.innerText = `${updatedTime.getMonth() + 1}/${updatedTime.getDate()}/${updatedTime.getFullYear()}`;
+              postSig.innerText = `${post.sig} - ${timeStamp}`;
             })
             .catch(error => {
               throw error;
@@ -146,7 +150,6 @@
       postEl.appendChild(editField);
       postEl.appendChild(postContent);
       postEl.appendChild(postSig);
-      postEl.appendChild(timeStamp);
       postEl.appendChild(actionContainer);
 
       postsContainer.appendChild(postEl);
