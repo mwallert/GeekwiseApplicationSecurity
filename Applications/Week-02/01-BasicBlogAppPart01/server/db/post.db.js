@@ -1,8 +1,8 @@
 const db = require('./db');
 
-const TABLENAME = 'cars';
+const TABLENAME = 'posts';
 
-class CarDb {
+class PostDb {
     static getOne(id) {
         id = parseInt(id);
         let query = `SELECT * FROM ${TABLENAME} WHERE is_deleted=false AND id = ${id}`;
@@ -10,8 +10,9 @@ class CarDb {
         return db.oneOrNone(query);
     }
 
-    static getAll() {
-        let query = `SELECT * FROM ${TABLENAME} WHERE is_deleted=false ORDER BY id DESC`;
+    static getAll(order) {
+        console.log(order);
+        let query = 'SELECT * FROM posts WHERE is_deleted=false ORDER BY id ' + (order ? 'ASC' : 'DESC');
         console.log(query);
         return db.any(query);
     }
@@ -21,7 +22,6 @@ class CarDb {
         let params = [];
         Object.keys(data).forEach((key) => {
             params.push(`${key} = '${data[key]}'`);
-            params.push(`updated_at = '${Date.now()}'`);
         });
         let query = `UPDATE ${TABLENAME} SET ${params.join()} WHERE is_deleted=false AND id = ${id} RETURNING *`;
         console.log(query);
@@ -40,12 +40,12 @@ class CarDb {
         let params = [];
         let values = [];
         Object.keys(data).forEach((key) => {
-            params.push(key);
-            values.push(`'${data[key]}'`);
+            values.push(data[key]);
         });
-        let query = `INSERT into ${TABLENAME} (${params.join()}) VALUES(${values.join()}) RETURNING *`;
+        
+        let query = 'INSERT into posts (title, post, author) VALUES($1, $2, $3) RETURNING *';
         console.log(query);
-        return db.one(query);
+        return db.one(query, values);
     }
 
     static getTotal() {
@@ -55,11 +55,11 @@ class CarDb {
     }
 
     static search(param) {
-        //let query = `SELECT * FROM ${TABLENAME} WHERE is_deleted=false AND make ILIKE '%${param}%' OR model ILIKE '%${param}%'`;
-        let query = `SELECT * FROM ${TABLENAME} WHERE is_deleted=false AND make = '${param}'`;
-        console.log(query);
-        return db.any(query);
+        console.log(param);
+        //let query = `SELECT * FROM ${TABLENAME} WHERE is_deleted=false AND post ILIKE '%${param}%' OR author ILIKE '%${param}%'`;
+        let query = 'SELECT * FROM posts WHERE is_deleted=false AND author = $1' + (param.order ? ' order by ASC' : ' order by DESC');
+        return db.any(query, [param]);
     }
 }
 
-module.exports = CarDb;
+module.exports = PostDb;
